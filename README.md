@@ -1,7 +1,9 @@
-Estación meteorológica en línea basada en MicroPython en ESP8266 y ESP32
+# Estación meteorológica en línea basada en MicroPython en ESP8266 y ESP32
+
 MicroPython es uno de los mejores firmware de microcontrolador que admite una variedad de plataformas integradas. Las placas de desarrollo WiFi como ESP8266 y ESP32 se encuentran entre los puertos compatibles con MicroPython. Con MicroPython, es extremadamente simple implementar aplicaciones IoT de primer nivel.  MicroPython tiene un amplio soporte para la programación de redes junto con la implementación de todas las funciones básicas de hardware. Combina soporte de hardware de bajo nivel con características de programación de alto nivel, que los ecosistemas de microcontroladores integrados basados en C generalmente no tienen. Además, la sintaxis de Python hace que la programación incrustada sea súper simple, limpia y precisa.
 En este proyecto, desarrollaremos una estación meteorológica en línea configurada sobre ESP8266 / ESP32. El proyecto utiliza ESP8266 como microcontrolador al obtener lecturas de sensores de DHT-11, mientras que al mismo tiempo, se beneficia de las funciones de programación de red de MicroPython para conectarse y operar dentro de una red IoT. Esta estación meteorológica está operativa dentro de los límites de una LAN inalámbrica y transmite temperatura y humedad como un servidor TCP en funcionamiento dentro de la red.
-Requisitos previos
+
+## Requisitos previos
 
 Antes de continuar, debe haber configurado uPyCraft IDE o Thonny IDE como entorno de desarrollo de software. Además, debe haber cargado el firmware de MicroPython a ESP8266 / ESP32. 
 Componentes necesarios
@@ -11,7 +13,9 @@ Componentes necesarios
 4.	Placa de pruebas x1
 5.	Cables de conexión/cables de puente
 6.	Ordenador/Móvil x1
-Conexiones de circuitos
+
+## Conexiones de circuitos
+
 En este proyecto, ESP8266/ESP32 actúan como un servidor TCP que aloja una página web HTML simple. El sensor DHT11 está interconectado con ESP8266/ESP32. El tablero lee la temperatura y la humedad de DHT11 y publica las lecturas en la página web alojada. Las conexiones de circuito solo son necesarias para interconectar DHT11 con ESP8266/ESP32. DHT11 tiene el siguiente diagrama de pines.
 
 ![image](https://user-images.githubusercontent.com/20059518/222920167-f6c221f9-5412-4ad7-a295-4b01c77e97d1.png)
@@ -29,7 +33,8 @@ Después de las conexiones de circuito, el servidor TCP ESP8266 tendría el sigu
 
 ![image](https://user-images.githubusercontent.com/20059518/222920218-37883a0a-7f30-4a2e-a80b-3f3b3bcf4e02.png)
 
-Cómo funciona
+## Cómo funciona
+
 el proyecto Esta estación meteorológica en línea basada en ESP8266/ESP32 lee la temperatura y la humedad del sensor DHT11 y publica las lecturas en una página web en tiempo real. La página web está alojada por el propio ESP8266/ESP32, para lo cual, la placa está configurada como un servidor TCP. Se puede acceder a la página web desde cualquier dispositivo, computadora o móvil que tenga un navegador para acceder a Internet a través del protocolo HTTP. La página web está alojada localmente dentro de LAN inalámbrica, por lo que solo los dispositivos conectados a la misma conexión WiFi pueden acceder a la página web.
 El funcionamiento del proyecto es sencillo. La placa lee la temperatura y la humedad de DHT11 utilizando el módulo DHT incorporado de MicroPython. La placa se conecta con una conexión WiFi disponible utilizando el módulo de red de MicroPython. Para alojar una página web y operar como un servidor TCP, se utiliza el módulo de socket de MicroPython. ESP8266/ESP32 lee la temperatura y la humedad e incrusta las lecturas dentro de la página web. La página web se devuelve como una respuesta HTTP a cualquier dispositivo que acceda a la dirección IP del host local.
 El código
@@ -41,7 +46,9 @@ Una red de objetos. Se crea una instancia de la clase WLAN(), configurando ESP82
 Se declara un sensor variable para crear instancias del objeto de la clase DHT. Las variables temperatura y zumbido se declaran para almacenar lecturas de temperatura y humedad. Se define una función definida por el usuario read_dht() para obtener lecturas de temperatura y humedad de DHT11. La función llama al método measure() para obtener lecturas del sensor DHT11. Utiliza métodos de temperatura () y humedad () para obtener valores de temperatura y humedad, respectivamente, como flotante o entero. Los valores de temperatura y humedad se devuelven en variables globales temp y hum, respectivamente.
 Se define una función definida por el usuario web_page() para devolver una página HTML con valores de temperatura y humedad almacenados en variables globales temp y hum incrustados dentro de la página HTML. Se crea una instancia de un objeto de clase de socket y se configura para utilizar la dirección IPv4 y TCP para el protocolo de capa de red. El objeto se enlaza a la dirección localhost mediante el método bind() y se activa para escuchar desde clientes TCP llamando al método listen().
 Se inicia un bucle de tiempo infinito. En el bucle, el servidor TCP ESP8266/ESP32 está configurado para aceptar solicitudes HTTP de clientes TCP de la misma red WiFi llamando al método s.connect(). Las solicitudes HTTP de un cliente TCP conectado se almacenan en una solicitud variable llamando al método conn.recv(). El mensaje que contiene las lecturas de temperatura y humedad se imprime en la consola, y la página web que contiene los valores de temperatura y humedad incrustados se devuelve como respuesta llamando a los métodos conn.send() y conn.sendall(). Después de devolver la página web como respuesta, la conexión con el cliente TCP se cierra explícitamente llamando al método conn.close().
-Resultado
+
+## Resultado
+
 Se accede a la página web con lecturas de temperatura y humedad del sensor DHT11 escribiendo la dirección IP devuelta por el método station.ifconfig() en la barra de direcciones de cualquier navegador. El servidor TCP ESP8266/ESP32 que funciona como una estación meteorológica en línea devuelve una página web personalizada como respuesta a una solicitud HTTP del navegador de su computadora / móvil. La siguiente captura de pantalla muestra la página web devuelta por la estación meteorológica en línea ESP8266/ESP32.
 
 ![image](https://user-images.githubusercontent.com/20059518/222920234-0c1386a8-cc21-4371-9c7c-dc998beb1b64.png)
